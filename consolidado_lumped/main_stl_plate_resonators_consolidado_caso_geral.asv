@@ -301,7 +301,6 @@ q_total(dofs_i) = q_internal;
 
 % end Part 9
 
-% Parei aqui na explicação
 
 %Part 10 - Spatial harmonics amplitude calculation
 
@@ -402,9 +401,9 @@ end
 % title('Absolute values of harmonics for a given frequency')
 
 figure
-W1_mn_interest = W1_mn_store(:,:,57);
-max_W1_mn=max(W1_mn_interest(5,5));
-heatmap(log10(abs(real(W1_mn_interest./max_W1_mn))))
+W1_mn_interest = W1_mn_store(:,:,20);
+max_W1_mn=max(W1_mn_interest(1,1));
+heatmap(real(W1_mn_interest./max_W1_mn))
 % hold on
 % stem3(m,n,imag(W1_mn_interest./max_W1_mn),'--*r')
 title('Normalized values of harmonics for a given frequency')
