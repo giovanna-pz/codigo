@@ -29,7 +29,6 @@ node_res = sort(reshape(node_res,[1,numberRes]));
 z_dof_res = (node_res-ones(1,numberRes))*dof+ones(1,numberRes);
 dof_res = GDof+1:GDof+numberRes;
 
-
 % increasing matrix size
 K_new= zeros(GDof+numberRes);
 M_new= zeros(GDof+numberRes);
@@ -39,16 +38,16 @@ M_new(1:GDof, 1: GDof) = MG;
 
 % inserting data from spring-mass system
 for rr=1:numberRes
-K_new(z_dof_res(rr),z_dof_res(rr)) = K_new(z_dof_res(rr),z_dof_res(rr))+kr;
+    K_new(z_dof_res(rr),z_dof_res(rr)) = K_new(z_dof_res(rr),z_dof_res(rr))+kr;
 
-K_new(z_dof_res(rr),dof_res(rr)) = K_new(z_dof_res(rr),dof_res(rr)) - kr;
+    K_new(z_dof_res(rr),dof_res(rr)) = K_new(z_dof_res(rr),dof_res(rr)) - kr;
 
-K_new(dof_res(rr),z_dof_res(rr)) = K_new(dof_res(rr),z_dof_res(rr))-kr;
+    K_new(dof_res(rr),z_dof_res(rr)) = K_new(dof_res(rr),z_dof_res(rr))-kr;
 
-K_new(dof_res(rr),dof_res(rr)) = K_new(dof_res(rr),dof_res(rr))+kr;
+    K_new(dof_res(rr),dof_res(rr)) = K_new(dof_res(rr),dof_res(rr))+kr;
 
 
-M_new(dof_res(rr),dof_res(rr)) = M_new(dof_res(rr),dof_res(rr))+mr;
+    M_new(dof_res(rr),dof_res(rr)) = M_new(dof_res(rr),dof_res(rr))+mr;
 
 
 end

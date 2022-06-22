@@ -147,127 +147,127 @@ W1_mn_store= zeros(m_index,n_index,nfreq);
 % Begin frequency loop
 for i=1:nfreq
 
-A1 = freq(i);   
-formatSpec = ' \n Frequency =%4.2f Hz \n';
-fprintf(formatSpec,A1)    
+    A1 = freq(i);   
+    formatSpec = ' \n Frequency =%4.2f Hz \n';
+    fprintf(formatSpec,A1)    
     
-w=omega(i);
+    w=omega(i);
 
-%Dynamic stiffness matrix of the problem - plate with resonators
-D = K_new - w^2*M_new;
+    %Dynamic stiffness matrix of the problem - plate with resonators
+    D = K_new - w^2*M_new;
 
-% % Part 5 - FRF calculation, material in vaccum - OPTIONAL
-% % bare plate
-% D_struct = KG - w^2*MG;
-% u = D_struct\F;
-% u_f(:,i)=u;
-% u_z(i) = u(output);
+    % % Part 5 - FRF calculation, material in vaccum - OPTIONAL
+    % % bare plate
+    % D_struct = KG - w^2*MG;
+    % u = D_struct\F;
+    % u_f(:,i)=u;
+    % u_z(i) = u(output);
 
-%%end Part 5
+    %%end Part 5
 
-%Part 6 - Wavenumber calculation in air and at the material
+    %Part 6 - Wavenumber calculation in air and at the material
 
-%Wavenumbers of the incident wave (air)
-k= w/c0;
+    %Wavenumbers of the incident wave (air)
+    k= w/c0;
 
-kx = kx_f(k,theta,phi);
-ky = ky_f(k,theta,phi);
+    kx = kx_f(k,theta,phi);
+    ky = ky_f(k,theta,phi);
 
-%store wavenumbers to plot
-kx_p(i) = kx;
-ky_p(i) = ky;
+    %store wavenumbers to plot
+    kx_p(i) = kx;
+    ky_p(i) = ky;
 
-%Propagation constants in x and y directions in the material
-mu_x = kx*Lx;
-mu_y = ky*Ly;
+    %Propagation constants in x and y directions in the material
+    mu_x = kx*Lx;
+    mu_y = ky*Ly;
 
-%Wavenumber in z direction (air) - depending on harmonics - Matricial form
+    %Wavenumber in z direction (air) - depending on harmonics - Matricial form
 
-kx_aux=kx_aux_f(mu_x,m,Lx,m_index,n_index);
-ky_aux=ky_aux_f(mu_y,n,Ly,m_index,n_index);
+    kx_aux=kx_aux_f(mu_x,m,Lx,m_index,n_index);
+    ky_aux=ky_aux_f(mu_y,n,Ly,m_index,n_index);
 
-%store wavenumbers to plot
-kx_aux_p(i,:,:) = kx_aux;
-ky_aux_p(i,:,:) = ky_aux;
+    %store wavenumbers to plot
+    kx_aux_p(i,:,:) = kx_aux;
+    ky_aux_p(i,:,:) = ky_aux;
 
-%Calling wavenumber function to calculate kz1mn
-k_matricial= k_matricial_f(k,m_index,n_index);
-kz1mn = f_kz(k_matricial,kx_aux,ky_aux); 
-kz2mn = kz1mn; %same fluid
+    %Calling wavenumber function to calculate kz1mn
+    k_matricial= k_matricial_f(k,m_index,n_index);
+    kz1mn = f_kz(k_matricial,kx_aux,ky_aux); 
+    kz2mn = kz1mn; %same fluid
 
-%store wavenumber to plot
-kzmn_p(i,:,:) = kz1mn;
+    %store wavenumber to plot
+    kzmn_p(i,:,:) = kz1mn;
 
-%Dynamic Stiffness of the fluids
-rho1=rho0;
-rho2=rho0;
-%Equation 10
-Df1mn = (-1j*rho1*w^2)./(kz1mn);
-Df2mn = (-1j*rho2*w^2)./(kz2mn); 
+    %Dynamic Stiffness of the fluids
+    rho1=rho0;
+    rho2=rho0;
+    %Equation 10
+    Df1mn = (-1j*rho1*w^2)./(kz1mn);
+    Df2mn = (-1j*rho2*w^2)./(kz2mn); 
 
-% end Part 6
+    % end Part 6
 
-% Part 7 - External force calculation (Acoustic force)
+    % Part 7 - External force calculation (Acoustic force)
 
-% initializating force/moments vector
-Fext2=zeros(GDof+numberRes,1);
+    % initializating force/moments vector
+    Fext2=zeros(GDof+numberRes,1);
 
-% Vector of external forces  calculated only for
-% displacement degrees of freedom
-%Equation 18/19, but using shape functions
-Fext = force_external_lumped(nnode,nelem,elem,nodes,P_inc,kx,ky,A_element);
+    % Vector of external forces  calculated only for
+    % displacement degrees of freedom
+    %Equation 18/19, but using shape functions
+    Fext = force_external_lumped(nnode,nelem,elem,nodes,P_inc,kx,ky,A_element);
 
-%Adding rotational degrees of freedom
-Fext2(1:3:GDof)= Fext;
- 
-% end Part 7
+    %Adding rotational degrees of freedom
+    Fext2(1:3:GDof)= Fext;
 
-%Part 8 - Fluid loading calculation - Reaction of the fluid to the plate
-%displacement - This calculation depends on the spatial harmonics created
-%on the plate
+    % end Part 7
 
-%Summation for harmonic components to calculate Df - Equation 33
+    %Part 8 - Fluid loading calculation - Reaction of the fluid to the plate
+    %displacement - This calculation depends on the spatial harmonics created
+    %on the plate
 
-%Based on equations 25,26 and 28 using shape functions
-[Df,V_store_H] = force_fluid_lumped(GDof, numberRes,m_index,n_index,nnode,nelem,elem,nodes,...
+    %Summation for harmonic components to calculate Df - Equation 33
+
+    %Based on equations 25,26 and 28 using shape functions
+    [Df,V_store_H] = force_fluid_lumped(GDof, numberRes,m_index,n_index,nnode,nelem,elem,nodes,...
      dof, Df1mn,kx_aux,ky_aux,kz2mn,h,A_element);
 
-% Adding fluid effects to dynamic stiffness matrix
+    % Adding fluid effects to dynamic stiffness matrix
 
-%Until this point the index of D is in the original order - matrices K, M
-%Equation 32
-D_til = D+(1/(Lx*Ly))*Df;
+    %Until this point the index of D is in the original order - matrices K, M
+    %Equation 32
+    D_til = D+(1/(Lx*Ly))*Df;
 
-%end Part 8
+    %end Part 8
 
-% Part 9 - WFE Model - Applying periodical conditions and the equilibrium
-% of forces at the boundary of the periodic cell
+    % Part 9 - WFE Model - Applying periodical conditions and the equilibrium
+    % of forces at the boundary of the periodic cell
 
-%Separating internal and boundary dofs
-%Change order of boundary dofs for dofs in this order (q1,q2,q3,q4,ql,qb,qr,qt)
+    %Separating internal and boundary dofs
+    %Change order of boundary dofs for dofs in this order (q1,q2,q3,q4,ql,qb,qr,qt)
 
-%Partitioning Dynamic Stiffness Matrix
-D_til_bb= D_til(dofs_b,dofs_b);
-D_til_bi= D_til(dofs_b,dofs_i);
-D_til_ib= D_til(dofs_i,dofs_b);
-D_til_ii= D_til(dofs_i,dofs_i);
+    %Partitioning Dynamic Stiffness Matrix
+    D_til_bb= D_til(dofs_b,dofs_b);
+    D_til_bi= D_til(dofs_b,dofs_i);
+    D_til_ib= D_til(dofs_i,dofs_b);
+    D_til_ii= D_til(dofs_i,dofs_i);
 
-%Partitioning external force (Acoustic)
-Fext_b = Fext2(dofs_b);
-Fext_i = Fext2(dofs_i);
+    %Partitioning external force (Acoustic)
+    Fext_b = Fext2(dofs_b);
+    Fext_i = Fext2(dofs_i);
 
 
-%Wave propagation constants - equation 36
-lambda_x = exp(-1j*mu_x);
-lambda_y = exp(-1j*mu_y);
+    %Wave propagation constants - equation 36
+    lambda_x = exp(-1j*mu_x);
+    lambda_y = exp(-1j*mu_y);
 
-% fat - number of nodes at the lateral of the cell, excluding the corners
-fat = Ngrid-2; 
+    % fat - number of nodes at the lateral of the cell, excluding the corners
+    fat = Ngrid-2; 
 
-%The Lambda_R matrix in the article contains typography errors - Equation
-%38
-%Matriz Giovanna 
-Lambda_R = [         eye(dof,dof), zeros(dof,fat*dof), zeros(dof,fat*dof);...
+    %The Lambda_R matrix in the article contains typography errors - Equation
+    %38
+    %Matriz Giovanna 
+    Lambda_R = [         eye(dof,dof), zeros(dof,fat*dof), zeros(dof,fat*dof);...
             lambda_x*eye(dof,dof), zeros(dof,fat*dof), zeros(dof,fat*dof);...
             lambda_y*eye(dof,dof), zeros(dof,fat*dof), zeros(dof,fat*dof);...
             lambda_x*lambda_y*eye(dof,dof), zeros(dof,fat*dof), zeros(dof,fat*dof);
@@ -276,101 +276,97 @@ Lambda_R = [         eye(dof,dof), zeros(dof,fat*dof), zeros(dof,fat*dof);...
             zeros(fat*dof,dof),lambda_x*eye(fat*dof,fat*dof), zeros(fat*dof,fat*dof);
             zeros(fat*dof,dof), zeros(fat*dof,fat*dof),lambda_y*eye(fat*dof,fat*dof)];
 
-% Equation 41
-Lambda_L = Lambda_R';        
+    % Equation 41
+    Lambda_L = Lambda_R';        
 
 
-% na - number of dofs at the boundary
-na = length(dofs_b);
-% ni - number of internal dofs
-ni = length(dofs_i);
-% nc- numbers of dofs in qc - qc = [q1,ql,qb] - equation 38 
-nc = dof + 2*fat*dof;
+    % na - number of dofs at the boundary
+    na = length(dofs_b);
+    % ni - number of internal dofs
+    ni = length(dofs_i);
+    % nc- numbers of dofs in qc - qc = [q1,ql,qb] - equation 38 
+    nc = dof + 2*fat*dof;
 
-% Swicth between Not condensed problem and condensed problem
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%wfeproblemnotcondensed
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-wfeproblemdynamiccondensed
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Swicth between Not condensed problem and condensed problem
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %wfeproblemnotcondensed
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    wfeproblemdynamiccondensed
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%Changing to the order of the original FE problem
-q_total = zeros(GDof+numberRes,1);
-q_total(dofs_b) = q_bound;
-q_total(dofs_i) = q_internal;
+    %Changing to the order of the original FE problem
+    q_total = zeros(GDof+numberRes,1);
+    q_total(dofs_b) = q_bound;
+    q_total(dofs_i) = q_internal;
 
-% end Part 9
+    % end Part 9
 
-% Parei aqui na explicação
+    %Part 10 - Spatial harmonics amplitude calculation
 
-%Part 10 - Spatial harmonics amplitude calculation
-
-% Calculation of the amplitudes of the harmonics
-%Equation 28 and 29
-W1_mn= zeros(m_index,n_index);
+    % Calculation of the amplitudes of the harmonics
+    %Equation 28 and 29
+    W1_mn= zeros(m_index,n_index);
 
 
- for ii =1:m_index
-     for jj = 1:n_index
-         
-         v_aux = V_store_H(:,ii,jj);
-         v_aux1 = zeros(GDof+numberRes,1);
-         v_aux1(1:dof:GDof) = v_aux;
-         %Equation 29
-         % without the complex conjugate because of the reformulation
-         %using shape functions in equation 28
-         W1_mn(ii,jj) = (1/(Lx*Ly))*v_aux1.'*q_total;
-                  
-     end
- end
- 
- W2_mn = W1_mn; %same degrees of freedom on the two sides of the plate
- W1_mn_store(:,:,i)=W1_mn;
- 
- %Amplitude of the sound pressure harmonics
- %Equation 9
- P1_mn = -Df1mn.*W1_mn;
- P2_mn =  Df2mn.*W2_mn;
- 
- 
- %end Part 10
- 
- 
- %Part 11 -Displacement calculation - Summation of harmonics components
+    for ii =1:m_index
+        for jj = 1:n_index
+             v_aux = V_store_H(:,ii,jj);
+             v_aux1 = zeros(GDof+numberRes,1);
+             v_aux1(1:dof:GDof) = v_aux;
+             %Equation 29
+             % without the complex conjugate because of the reformulation
+             %using shape functions in equation 28
+             W1_mn(ii,jj) = (1/(Lx*Ly))*v_aux1.'*q_total;
+        end
+    end
 
- %Positions where displacement is evaluated 
- %center of the plate
- x_disp=0;
- y_disp=0;
- 
- %Equation 4
- aux_disp = exp(-1j*(kx_aux*x_disp+ky_aux*y_disp));
- disps_mn = W1_mn.* aux_disp;
- 
- %summation
- disp(i) = sum(sum(disps_mn,2));
- 
-% end Part 11
+    W2_mn = W1_mn; %same degrees of freedom on the two sides of the plate
+    W1_mn_store(:,:,i)=W1_mn;
 
-%Part 12 - sound transmission coefficient
-%Equation 45
+    %Amplitude of the sound pressure harmonics
+    %Equation 9
+    P1_mn = -Df1mn.*W1_mn;
+    P2_mn =  Df2mn.*W2_mn;
 
-tau2_aux=(1/rho2)*kz2mn;
-tau1_aux =(1/rho1)*kz1mn;
 
-tau_mn_num= real(tau2_aux.*abs(P2_mn.^2));
-tau_mn_den = tau1_aux.*abs((P_inc*ones(m_index,n_index)).^2);
-% tau_mn_num= real(abs(P2_mn.^2));
-% tau_mn_den = abs((P_inc*ones(m_index,n_index)).^2);
+    %end Part 10
+
+
+    %Part 11 -Displacement calculation - Summation of harmonics components
+
+    %Positions where displacement is evaluated 
+    %center of the plate
+    x_disp=0;
+    y_disp=0;
+
+    %Equation 4
+    aux_disp = exp(-1j*(kx_aux*x_disp+ky_aux*y_disp));
+    disps_mn = W1_mn.* aux_disp;
+
+    %summation
+    disp(i) = sum(sum(disps_mn,2));
+
+    % end Part 11
+
+    %Part 12 - sound transmission coefficient
+    %Equation 45
+
+    tau2_aux=(1/rho2)*kz2mn;
+    tau1_aux =(1/rho1)*kz1mn;
+
+    tau_mn_num= real(tau2_aux.*abs(P2_mn.^2));
+    tau_mn_den = tau1_aux.*abs((P_inc*ones(m_index,n_index)).^2);
+    % tau_mn_num= real(abs(P2_mn.^2));
+    % tau_mn_den = abs((P_inc*ones(m_index,n_index)).^2);
 
 
 
-tau_mn = tau_mn_num./tau_mn_den;
-%summation
-tau = sum(sum(tau_mn),2);     
+    tau_mn = tau_mn_num./tau_mn_den;
+    %summation
+    tau = sum(sum(tau_mn),2);     
 
 
-tau_total(i)=tau;
+    tau_total(i)=tau;
 
 end
 
