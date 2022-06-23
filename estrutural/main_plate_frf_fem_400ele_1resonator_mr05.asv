@@ -49,8 +49,8 @@ for iy=1:Ngrid-1
     
 end
 
-numberNodes = size(nodes,1);
-numberElements = size(elem,1);
+numberNodes = size(nodes,1)
+numberElements = size(elem,1)
 
 inci_aux = 1:1:numberElements;
 inci = [inci_aux', elem];
@@ -96,7 +96,7 @@ numberRes = numberElements/4;
 prescribedNodes = [1:2*Ngrid:421,3,5,7,15,17,19,21:2*Ngrid:441,423:2:439 ]; % simply supported - no translation
 
 lr = length(node_res);
-% node_res = [];
+node_res = [];
 for g=1:lr-1
     
     l_aux = Ngrid*2*ones(1,lr)+node_res(g,:);
@@ -117,18 +117,17 @@ K_new(1:GDof, 1: GDof) = KG;
 M_new(1:GDof, 1: GDof) = MG;
 
 % inserting data from spring-mass system
-aux = 1e-5;
 for rr=1:numberRes
-K_new(z_dof_res(rr),z_dof_res(rr)) = K_new(z_dof_res(rr),z_dof_res(rr))+kr*aux;
+K_new(z_dof_res(rr),z_dof_res(rr)) = K_new(z_dof_res(rr),z_dof_res(rr))+kr;
 
-K_new(z_dof_res(rr),dof_res(rr)) = K_new(z_dof_res(rr),dof_res(rr)) - kr*aux;
+K_new(z_dof_res(rr),dof_res(rr)) = K_new(z_dof_res(rr),dof_res(rr)) - kr;
 
-K_new(dof_res(rr),z_dof_res(rr)) = K_new(dof_res(rr),z_dof_res(rr))-kr*aux;
+K_new(dof_res(rr),z_dof_res(rr)) = K_new(dof_res(rr),z_dof_res(rr))-kr;
 
-K_new(dof_res(rr),dof_res(rr)) = K_new(dof_res(rr),dof_res(rr))+kr*aux;
+K_new(dof_res(rr),dof_res(rr)) = K_new(dof_res(rr),dof_res(rr))+kr;
 
 
-M_new(dof_res(rr),dof_res(rr)) = M_new(dof_res(rr),dof_res(rr))+mr*aux;
+M_new(dof_res(rr),dof_res(rr)) = M_new(dof_res(rr),dof_res(rr))+mr;
 
 
 end
@@ -167,8 +166,6 @@ end
 F = zeros(GDof+numberRes,1);
 input = (node_force-1)*dof+1;
 F(input)= F0; % force in z direction 
-
-
 %F((node_force-1)*dof+2)= 1;% moment around x   
 %F((node_force-1)*dof+3) = 1; %  moment around y 
 
