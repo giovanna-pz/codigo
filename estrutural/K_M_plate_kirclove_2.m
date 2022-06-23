@@ -1,0 +1,79 @@
+function[Ke,Me]= K_M_plate_kirclove_2(E,h,nu,rho,lx,ly)
+
+% Reference:Theories and applications of plate analysis : classical, numerical and engineering methods
+%R. Szilard
+
+% original numeration
+%4 --------3
+%|         |
+%1---------2
+
+%% mass matrix of one element
+beta=[1 0 0;0 lx 0;0 0 ly];
+
+Qm=[beta zeros(3,3) zeros(3,3) zeros(3,3);
+    zeros(3,3) beta zeros(3,3) zeros(3,3);
+    zeros(3,3) zeros(3,3) beta zeros(3,3);
+    zeros(3,3) zeros(3,3) zeros(3,3) beta];
+
+Mm=rho*h*lx*ly/25200*...
+    [3454 461 -461 1226 199 274 394 -116 116 1226 -274 -199;...
+    461 80 -63 199 40 42 116 -30 28 274 -60 -42;...
+    -461 -63 80 -274 -42 -60 -116 28 -30 -199 42 40;...
+    1226 199 -274 3454 461 461 1226 -274 199 394 -116 -116;...
+    199 40 -42 461 80 63 274 -60 42 116 -30 -28;...
+    274 42 -60 461 63 80 199 -42 40 116 -28 -30;...
+    394 116 -116 1226 274 199 3454 -461 461 1226 -199 -274;...
+    -116 -30 28 -274 -60 -42 -461 80 -63 -199 40 42;...
+    116 28 -30 199 42 40 461 -63 80 274 -42 -60;...
+    1226 274 -199 394 116 116 1226 -199 274 3454 -461 -461;...
+    -274 -60 42 -116 -30 -28 -199 40 -42 -461 80 63;...
+    -199 -42 40 -116 -28 -30 -274 42 -60 -461 63 80];
+
+Me=Qm*Mm*Qm;
+
+
+%% stiffness matrix of one element
+r=lx/ly;
+
+F=(42-12*nu+60*r^2+60*r^(-2))*h^2/(lx*ly);
+Q=(15*r^(-1)-3*(1-nu)*r)*h^2/lx;
+G=(30+3*r^(-1)+12*nu*r^(-1))*h^2/ly;
+R=(20*r+4*(1-nu)*r^(-1))*h^2;
+H=(30*r^(-1)+3*r+12*nu*r)*h^2/lx;
+S=(10*r-(1-nu)*r^(-1))*h^2;
+I=(-42+12*nu-60*r^2+30*r^(-2))*h^2/(lx*ly);
+T=(10*r-4*(1-nu)*r^(-1))*h^2;
+J=(30*r+3*(1-nu)*r^(-1))*h^2/ly;
+U=(5*r+(1-nu)*r^(-1))*h^2;
+K=(15*r^(-1)-3*r-12*nu*r)*h^2/lx;
+V=(20*r^(-1)+4*(1-nu)*r)*h^2;
+L=(-42+12*nu-60*r^(-2)+30*r^2)*h^2/(lx*ly);
+W=(10*r^(-1)-4*(1-nu)*r)*h^2;
+M=(-15*r+3*r^(-1)+12*nu*r^(-1))*h^2/ly;
+X=(10*r^(-1)-(1-nu)*r)*h^2;
+N=(30*r^(-1)+3*(1-nu)*r)*h^2/lx;
+Y=(5*r^(-1)+(1-nu)*r)*h^2;
+O=(42-12*nu-30*r^2-30*r^(-2))*h^2/(lx*ly);
+Z=15*nu*h^2;
+P=(-15*r+3*(1-nu)*r^(-1))*h^2/ly;
+
+Ke=E*h/(180*(1-nu^2))*...
+    [F G -H L -M -N O -P -Q I J -K;...
+    G R -Z -M T 0 P U 0 -J S 0;...
+    -H -Z V N 0 X Q 0 Y -K 0 W;...
+    L -M N F G H I J K O -P Q;...
+    -M T 0 G R Z -J S 0 P U 0;...
+    -N 0 X H Z V K 0 W -Q 0 Y;...
+    O P Q I -J K F -G H L M N;...
+    -P U 0 J S 0 -G R -Z M T 0;...
+    -Q 0 Y K 0 W H -Z V -N 0 X;...
+    I -J -K O P -Q L M -N F -G -H;...
+    J S 0 -P U 0 M T 0 -G R Z;...
+    -K 0 W Q 0 Y N 0 X -H Z V];
+end
+
+
+
+
+
