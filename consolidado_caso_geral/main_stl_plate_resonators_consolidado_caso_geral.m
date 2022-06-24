@@ -30,9 +30,9 @@ fmin = 50; %[Hz]
 df = 5; %[Hz]
 fmax = 6000; %[Hz]
 
-f=fmin:df:fmax;
-omega = 2*pi*f; %[rad/s]
-nfreq = length(f);
+freq=fmin:df:fmax;
+omega = 2*pi*freq; %[rad/s]
+nfreq = length(freq);
 
 % Number of elements
 nel_x =8;
@@ -146,7 +146,7 @@ W1_mn_store= zeros(m_index,n_index,nfreq);
 % Begin frequency loop
 for i=1:nfreq
 
-A1 = f(i);   
+A1 = freq(i);   
 formatSpec = ' \n Frequency =%4.2f Hz \n';
 fprintf(formatSpec,A1)    
     
@@ -384,7 +384,7 @@ end
 % 
 % %Receptance
 % alfa = u_z/F0;
-% semilogx(f,20*log10(abs(alfa)),'k','LineWidth',2)
+% semilogx(freq,20*log10(abs(alfa)),'k','LineWidth',2)
 % hold on
 % plot(freq_vector_comsol,Recpt_comsol,'r--','LineWidth',2)
 % title('Receptance at the center of the bare plate')
@@ -414,9 +414,9 @@ title('Normalized values of harmonics for a given frequency')
 %% WAVENUMBERS GRAPHS
 
 figure
-plot(f,kx_p,'LineWidth',2)
+plot(freq,kx_p,'LineWidth',2)
 hold on
-plot(f,ky_p,'LineWidth',2)
+plot(freq,ky_p,'LineWidth',2)
 title('Wavenumbers of the excitation waves')
 legend('k_x','k_y')
 xlabel('Frequency [Hz]')
@@ -428,7 +428,7 @@ for pp =1:m_index
     for pp2 = 1:n_index
 
 hold on       
-plot(f,kx_aux_p(:,pp,pp2),'LineWidth',2)
+plot(freq,kx_aux_p(:,pp,pp2),'LineWidth',2)
 hold on
 
     end
@@ -442,7 +442,7 @@ for pp3 =1:m_index
     for pp4 = 1:n_index
 
 hold on       
-plot(f,ky_aux_p(:,pp3,pp4),'LineWidth',2)
+plot(freq,ky_aux_p(:,pp3,pp4),'LineWidth',2)
 hold on
 
     end
@@ -457,31 +457,31 @@ figure
 %     for pp6 = 1:n_index
 % 
 % hold on       
-% plot(f,abs(real(kzmn_p(:,pp5,pp6))),'LineWidth',2)
+% plot(freq,abs(real(kzmn_p(:,pp5,pp6))),'LineWidth',2)
 % hold on
-% plot(f,-abs(imag(kzmn_p(:,pp5,pp6))),'LineWidth',2)
+% plot(freq,-abs(imag(kzmn_p(:,pp5,pp6))),'LineWidth',2)
 %     end
 % end
 
-plot(f,abs(real(kzmn_p(:,5,1))),'LineWidth',2)
+plot(freq,abs(real(kzmn_p(:,5,1))),'LineWidth',2)
 hold on
-plot(f,-abs(imag(kzmn_p(:,5,1))),'LineWidth',2)
+plot(freq,-abs(imag(kzmn_p(:,5,1))),'LineWidth',2)
 hold on
-plot(f,abs(real(kzmn_p(:,6,1))),'LineWidth',2)
+plot(freq,abs(real(kzmn_p(:,6,1))),'LineWidth',2)
 hold on
-plot(f,-abs(imag(kzmn_p(:,6,1))),'LineWidth',2)
+plot(freq,-abs(imag(kzmn_p(:,6,1))),'LineWidth',2)
 hold on
-plot(f,abs(real(kzmn_p(:,7,1))),'LineWidth',2)
+plot(freq,abs(real(kzmn_p(:,7,1))),'LineWidth',2)
 hold on
-plot(f,-abs(imag(kzmn_p(:,7,1))),'LineWidth',2)
+plot(freq,-abs(imag(kzmn_p(:,7,1))),'LineWidth',2)
 hold on
-plot(f,abs(real(kzmn_p(:,8,1))),'LineWidth',2)
+plot(freq,abs(real(kzmn_p(:,8,1))),'LineWidth',2)
 hold on
-plot(f,-abs(imag(kzmn_p(:,8,1))),'LineWidth',2)
+plot(freq,-abs(imag(kzmn_p(:,8,1))),'LineWidth',2)
 hold on
-plot(f,abs(real(kzmn_p(:,9,1))),'LineWidth',2)
+plot(freq,abs(real(kzmn_p(:,9,1))),'LineWidth',2)
 hold on
-plot(f,-abs(imag(kzmn_p(:,9,1))),'LineWidth',2)
+plot(freq,-abs(imag(kzmn_p(:,9,1))),'LineWidth',2)
 
 legend('Real m=0,n=0','Imag m=0,n=0','Real m=1,n=0','Imag m=1,n=0',...
     'Real m=2,n=0','Imag m=2,n=0','Real m=3,n=0','Imag m=3,n=0', 'Real m=4,n=0','Imag m=4,n=0')
@@ -492,21 +492,21 @@ ylabel('kz_mn [2\pi/m]')
 
 figure
 
-plot(f,abs(real(kzmn_p(:,1,1))),'LineWidth',2)
+plot(freq,abs(real(kzmn_p(:,1,1))),'LineWidth',2)
 hold on
-plot(f,-abs(imag(kzmn_p(:,1,1))),'LineWidth',2)
+plot(freq,-abs(imag(kzmn_p(:,1,1))),'LineWidth',2)
 hold on
-plot(f,abs(real(kzmn_p(:,2,1))),'LineWidth',2)
+plot(freq,abs(real(kzmn_p(:,2,1))),'LineWidth',2)
 hold on
-plot(f,-abs(imag(kzmn_p(:,2,1))),'LineWidth',2)
+plot(freq,-abs(imag(kzmn_p(:,2,1))),'LineWidth',2)
 hold on
-plot(f,abs(real(kzmn_p(:,3,1))),'LineWidth',2)
+plot(freq,abs(real(kzmn_p(:,3,1))),'LineWidth',2)
 hold on
-plot(f,-abs(imag(kzmn_p(:,3,1))),'LineWidth',2)
+plot(freq,-abs(imag(kzmn_p(:,3,1))),'LineWidth',2)
 hold on
-plot(f,abs(real(kzmn_p(:,4,1))),'LineWidth',2)
+plot(freq,abs(real(kzmn_p(:,4,1))),'LineWidth',2)
 hold on
-plot(f,-abs(imag(kzmn_p(:,4,1))),'LineWidth',2)
+plot(freq,-abs(imag(kzmn_p(:,4,1))),'LineWidth',2)
 
 
 
@@ -526,12 +526,16 @@ ylabel('kz_mn [2\pi/m]')
 
 save('STL','STL')
 
+load f_ref 
+load uz_damp
+
 %To be compared with figure 6b of the paper
 figure
-loglog(f,abs(disp))
+loglog(freq,abs(disp),f,abs(uz_damp))
 title('Displacement at the center of the metamaterial plate')
 xlabel('Frequency [Hz]')
 ylabel('w [m]')
+legend('Displacement - WFE','Reference - \phi=0, \theta = 50 ')
 %axis([fmin,fmax,1*10-6,1*10-4])
 
 grid on
@@ -540,9 +544,8 @@ saveas(gcf,'displacement.jpg')
 
 %To be compared with figure 10 of the paper
 figure
-semilogx(f,STL)
+semilogx(freq,STL)
 hold on
-load f_ref 
 load STL_ref
 semilogx(f,STL_damp)
 title('Sound Transmission Loss for a Metamaterial')
