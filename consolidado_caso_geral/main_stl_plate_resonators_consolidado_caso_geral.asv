@@ -509,7 +509,7 @@ title('Normalized values of harmonics for a given frequency')
 
 
 
-%% STL and pltae displacement(with fluid loading) graphs
+%% STL and pltae displacement(with fluid loading) GRAPHS 
 
 %Part 13 - STL calculation
  STL = -10*log10(tau_total);
