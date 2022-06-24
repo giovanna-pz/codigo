@@ -1,5 +1,5 @@
 clear
-close all
+% close all
 clc
 
 %% This program calculates the displacements and the STL of a metamaterial plate 
@@ -35,8 +35,8 @@ omega = 2*pi*freq; %[rad/s]
 nfreq = length(freq);
 
 % Number of elements
-nel_x =2;
-nel_y =2;
+nel_x =8;
+nel_y =8;
 
 % Other fixed parameters
 
@@ -68,11 +68,8 @@ GDof =nnode*dof; % total number of dofs in strucuture
 
 % Mass and stiffness matrices - substructure plate
 % Choose for desired model
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 kircchoff_model
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %mindlin_model
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Updating K and M with resonators
 [~,node_res_first]=min(sqrt(nodes(:,1).^2)+nodes(:,2).^2);
@@ -84,10 +81,9 @@ subprogram_partitioningdofs
 % end Part 2
 
 %% Part 3 - Natural Frequencies and modes of Vibration - OPTIONAL
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Calculating natural frequencies and modes of vibration - structural only 
+% Calculating natural frequencies and modes of vibration - structural only 
 %  calculate_naturalfreqs_modes
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % end Part 3
 
 %% Part 4 - DISPERSION ANALYSIS %% OPTIONAL
@@ -232,7 +228,7 @@ for i=1:nfreq
 
     % Based on equations 25,26 and 28 using shape functions
     [Df,V_store_H] = force_fluid(GDof, numberRes,m_index,n_index,nnode,nelem,elem,nodes,...
-    csi_aux,eta_aux, dof, Df1mn,kx_aux,ky_aux,kz2mn,h);
+    csi_aux,eta_aux, wcsi_aux, weta_aux, dof, Df1mn,kx_aux,ky_aux,kz2mn,h);
 
     % Adding fluid effects to dynamic stiffness matrix
 
@@ -514,17 +510,17 @@ title('Normalized values of harmonics for a given frequency')
 %Part 13 - STL calculation
  STL = -10*log10(tau_total);
 
-save('STL','STL')
+% save('STL','STL')
 
-%To be compared with figure 6b of the paper
-figure
-loglog(freq,abs(disp))
-title('Displacement at the center of the metamaterial plate')
-xlabel('Frequency [Hz]')
-ylabel('w [m]')
-%axis([fmin,fmax,1*10-6,1*10-4])
-
-grid on
+% %To be compared with figure 6b of the paper
+% figure
+% loglog(freq,abs(disp))
+% title('Displacement at the center of the metamaterial plate')
+% xlabel('Frequency [Hz]')
+% ylabel('w [m]')
+% %axis([fmin,fmax,1*10-6,1*10-4])
+% 
+% grid on
 
 % saveas(gcf,'displacement.jpg')
 

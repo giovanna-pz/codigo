@@ -44,8 +44,8 @@ Df=zeros(GDof+numberRes,GDof+numberRes); %start summation
                       
                       aux_N2 = wcsi_aux(cc)*weta_aux(dd)*N2;
                       
-                      f_fluid = aux_N2*exp(-1j*((kx_aux(kk,ll)*x2)+(ky_aux(kk,ll)*y2)))*detJ2+f_fluid;
-                      f_fluid_H = aux_N2*exp(+1j*((kx_aux(kk,ll)*x2)+(ky_aux(kk,ll)*y2)))*...
+                      f_fluid = N2*exp(-1j*((kx_aux(kk,ll)*x2)+(ky_aux(kk,ll)*y2)))*detJ2+f_fluid;
+                      f_fluid_H = N2*exp(+1j*((kx_aux(kk,ll)*x2)+(ky_aux(kk,ll)*y2)))*...
                           detJ2+f_fluid_H;                  
                   
                   end
