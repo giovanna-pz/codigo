@@ -1,4 +1,4 @@
-function Fext = force_external(nnode,nelem,elem,nodes,csi_aux,eta_aux,kx,ky)
+function Fext = force_external(nnode,nelem,elem,nodes,csi_aux,eta_aux,wcsi_aux,weta_aux,kx,ky)
 
 Fext=zeros(nnode,1);
 
@@ -18,10 +18,15 @@ for jj=1:nelem
     
             csi = csi_aux(aa);
             eta = eta_aux(bb);
+            wcsi = wcsi_aux(aa);
+            weta = weta_aux(bb);
+            
             [N,detJ] = Quad(csi,eta,xcoord,ycoord);
             x = N.'*xcoord;
             y = N.'*ycoord;
-            fe = N*exp(-1j*(kx*x+ky*y))*detJ + fe;
+            
+         
+            fe = wcsi*weta*N*exp(-1j*(kx*x+ky*y))*detJ + fe;
     
         end
     end

@@ -35,8 +35,8 @@ omega = 2*pi*freq; %[rad/s]
 nfreq = length(freq);
 
 % Number of elements
-nel_x =8;
-nel_y =8;
+nel_x =2;
+nel_y =2;
 
 % Other fixed parameters
 
@@ -208,7 +208,7 @@ for i=1:nfreq
     % Vector of external forces  calculated only for
     % displacement degrees of freedom
     % Equation 18/19, but using shape functions
-    Fext = force_external(nnode,nelem,elem,nodes,csi_aux,eta_aux,kx,ky);
+    Fext = force_external(nnode,nelem,elem,nodes,csi_aux,eta_aux,wcsi_aux,weta_aux,kx,ky);
 
     % Adding rotational degrees of freedom
     Fext2(1:3:GDof)= Fext;
