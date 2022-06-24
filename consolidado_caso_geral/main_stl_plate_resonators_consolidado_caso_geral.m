@@ -82,8 +82,7 @@ subprogram_partitioningdofs
 
 %% Part 3 - Natural Frequencies and modes of Vibration - OPTIONAL
 % Calculating natural frequencies and modes of vibration - structural only 
-%  calculate_naturalfreqs_modes
-
+%  calculate_naturalfreqs_modes 
 % end Part 3
 
 %% Part 4 - DISPERSION ANALYSIS %% OPTIONAL
