@@ -82,11 +82,20 @@ dof = 3;
 GDof = dof*numberNodes;
 nnos_el = 4;
 
-%% Stiffness and mass matrices
-[Ke,Me]= K_M_plate_kirclove_2(E,h,nu,rho,dx,dx);
+%% Szilard Model
+% % Stiffness and mass matrices
+% [Ke,Me]= K_M_plate_kirclove_2(E,h,nu,rho,dx,dx);
 
-%% Assembly of global M andK matrices
-[KG,MG]= assembly_K_M_2(Ke,Me,dof,numberElements,nnos_el,GDof,inci);
+% % Assembly of global M andK matrices
+% [KG,MG]= assembly_K_M_2(Ke,Me,dof,numberElements,nnos_el,GDof,inci);
+
+
+%% Kirchoff Model 2020
+% [KG,MG] = feKirchhoffPlateMatrix(nodes,elem,dof,E,nu,rho,h);
+
+%% Kirchoff Model 2022
+
+kircchoff_model
 
 %% Mass- spring system
 kr = 4*(pi^2)*(fr^2)*mr; % [N/m] Stiffness based on nat. freq. and resonator mass
@@ -198,6 +207,8 @@ mob = 1j*alfa.*omega;
 %Inertance
 inert = -alfa.*(omega.^2);
 
+
+save('inert','inert')
 %% Graphs
 % figure
 % plot(freq,20*log10(abs(alfa)))
