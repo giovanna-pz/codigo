@@ -67,16 +67,16 @@ nn = length(n);
 
 % 3 points integration
 % Best results so far!
-csi_aux =  [-0.77459667 0           0.77459667];
-wcsi_aux = [ 0.55555556 0.88888889  0.55555556];
-eta_aux = csi_aux;
-weta_aux = wcsi_aux;
-
-% % 4 points integration
-% csi_aux =  [-0.86113631 -0.33998104 0.33998104 0.86113631 ];
-% wcsi_aux = [ 0.3478548   0.6521452  0.6521452  0.3478548 ];
+% csi_aux =  [-0.77459667 0           0.77459667];
+% wcsi_aux = [ 0.55555556 0.88888889  0.55555556];
 % eta_aux = csi_aux;
 % weta_aux = wcsi_aux;
+
+% % 4 points integration
+csi_aux =  [-0.86113631 -0.33998104 0.33998104 0.86113631 ];
+wcsi_aux = [ 0.3478548   0.6521452  0.6521452  0.3478548 ];
+eta_aux = csi_aux;
+weta_aux = wcsi_aux;
 
 % % 5 points integration
 % csi_aux =  [-0.9061798459 -0.5384693101  0          0.5384693101  0.9061798459  ];
