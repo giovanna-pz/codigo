@@ -69,9 +69,13 @@ Df=zeros(GDof+numberRes,GDof+numberRes); %start summation
           
           %Equation 33
           %(v1_mn_H.')- transpose without the complex conjugate
-          %Df = Df + 2*Df1mn(kk,ll)*(v1_mn*v1_mn_H.'); %Equation 33
-          Df = Df + Df1mn(kk,ll)*(v1_mn*v1_mn_H.')+Df1mn(kk,ll)*exp(1i*kz2mn(kk,ll)*h)*(v1_mn*v1_mn_H.') ; %Equation 33%Df = Df + 2*Df1mn(kk,ll)*(v1_mn*v1_mn_H.'); %Equation 33
+%           Df = Df + 2*Df1mn(kk,ll)*(v1_mn*v1_mn_H.'); %Equation 33
+          Df = Df + Df1mn(kk,ll)*(v1_mn*v1_mn_H.')+...
+              Df1mn(kk,ll)*exp(1i*kz2mn(kk,ll)*h)*(v1_mn*v1_mn_H.') ; %Equation 33%Df = Df + 2*Df1mn(kk,ll)*(v1_mn*v1_mn_H.'); %Equation 33
+          
+%           Df = Df + Df1mn(kk,ll)*(v1_mn_H.'*v1_mn)+...
+%               Df1mn(kk,ll)*exp(1i*kz2mn(kk,ll)*h)*(v1_mn_H.'*v1_mn) ;
   end
- end
+end
  
 end
