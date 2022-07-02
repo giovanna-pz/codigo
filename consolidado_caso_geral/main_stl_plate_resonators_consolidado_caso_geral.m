@@ -35,8 +35,8 @@ omega = 2*pi*freq; %[rad/s]
 nfreq = length(freq);
 
 % Number of elements
-nel_x =2;
-nel_y =2;
+nel_x =16;
+nel_y =16;
 
 % Other fixed parameters
 
@@ -69,7 +69,7 @@ GDof =nnode*dof; % total number of dofs in strucuture
 % Mass and stiffness matrices - substructure plate
 % Choose for desired model
 kircchoff_model
-%mindlin_model
+% mindlin_model % Its showing numerical problems
 
 % Updating K and M with resonators
 [~,node_res_first]=min(sqrt(nodes(:,1).^2)+nodes(:,2).^2);
@@ -115,8 +115,8 @@ k_matricial_f= @(k,m_index,n_index) k*ones(m_index,n_index);
 f_kz = @(k_matricial,kx_aux,ky_aux) -(1j)*sqrt(kx_aux.^2+ky_aux.^2-k_matricial.^2);
 
 %teste 2 - numero de onda
- %f_kz = @(k_matricial,kx_aux,ky_aux) -sqrt(k_matricial.^2-kx_aux.^2-ky_aux.^2).*(k_matricial.^2-kx_aux.^2-ky_aux.^2 > 0)+...
-  %    (+1j)*sqrt(k_matricial.^2-kx_aux.^2-ky_aux.^2).*(k_matricial.^2-kx_aux.^2-ky_aux.^2 < 0);
+%  f_kz = @(k_matricial,kx_aux,ky_aux) -sqrt(k_matricial.^2-kx_aux.^2-ky_aux.^2).*(k_matricial.^2-kx_aux.^2-ky_aux.^2 > 0)+...
+%      (+1j)*sqrt(k_matricial.^2-kx_aux.^2-ky_aux.^2).*(k_matricial.^2-kx_aux.^2-ky_aux.^2 < 0);
 
 %teste 3 - numero de onda
 %  f_kz = @(k_matricial,kx_aux,ky_aux) sqrt(k_matricial.^2-kx_aux.^2-ky_aux.^2).*(k_matricial.^2-kx_aux.^2-ky_aux.^2 >= 0)+...
@@ -215,7 +215,7 @@ for i=1:nfreq
 
     % Multiplying by the amplitude of the incident wave
     % Negative sign because of direction of force application
-    Fext2 = -P_inc*Fext2;
+    Fext2 = -2*P_inc*Fext2; % Perharps there is a scale problem in the Dq=f equation
 
     % end Part 7
 
@@ -395,7 +395,7 @@ end
 
 figure
 W1_mn_interest = W1_mn_store(:,:,57);
-max_W1_mn = W1_mn_interest(5,5);
+max_W1_mn = W1_mn_interest(6,6);
 heatmap(m,n,log10(abs(real(W1_mn_interest./max_W1_mn))))
 title('Normalized values of harmonics for a given frequency')
 
