@@ -202,8 +202,8 @@ kzmn_p(i,:,:) = kz1mn;
 rho1=rho0;
 rho2=rho0;
 %Equation 10
-Df1mn = (-1j*rho1*w^2)./(kz1mn);
-Df2mn = (-1j*rho2*w^2)./(kz2mn); 
+Df1mn = (1j*rho1*w^2)./(kz1mn);
+Df2mn = (1j*rho2*w^2)./(kz2mn); 
 
 % end Part 6
 
@@ -218,7 +218,7 @@ Fext2=zeros(GDof+numberRes,1);
 Fext = force_external_lumped(nnode,nelem,elem,nodes,P_inc,kx,ky,A_element);
 
 %Adding rotational degrees of freedom
-Fext2(1:3:GDof)= Fext;
+Fext2(1:3:GDof)= 2*Fext;
  
 % end Part 7
 
@@ -328,7 +328,7 @@ W1_mn= zeros(m_index,n_index);
  
  %Amplitude of the sound pressure harmonics
  %Equation 9
- P1_mn = -Df1mn.*W1_mn;
+ P1_mn = Df1mn.*W1_mn;
  P2_mn =  Df2mn.*W2_mn;
  
  
@@ -359,12 +359,9 @@ tau1_aux =(1/rho1)*kz1mn;
 
 tau_mn_num= real(tau2_aux.*abs(P2_mn.^2));
 tau_mn_den = tau1_aux.*abs((P_inc*ones(m_index,n_index)).^2);
-% tau_mn_num= real(abs(P2_mn.^2));
-% tau_mn_den = abs((P_inc*ones(m_index,n_index)).^2);
-
-
 
 tau_mn = tau_mn_num./tau_mn_den;
+
 %summation
 tau = sum(sum(tau_mn),2);     
 
@@ -392,19 +389,26 @@ end
 
 %% AMPLITUDE OF HARMONICS GRAPH
 
-figure
+% figure
+% 
+% W1_mn_interest = W1_mn_store(:,:,20);
+% stem3(m,n,real(W1_mn_interest),'filled')
+% hold on
+% stem3(m,n,imag(W1_mn_interest),'--*r')
+% title('Absolute values of harmonics for a given frequency')
+% 
+% figure
+% max_W1_mn=max(W1_mn_interest);
+% stem3(m,n,real(W1_mn_interest./max_W1_mn),'filled')
+% hold on
+% stem3(m,n,imag(W1_mn_interest./max_W1_mn),'--*r')
+% title('Normalized values of harmonics for a given frequency')
 
-W1_mn_interest = W1_mn_store(:,:,20);
-stem3(m,n,real(W1_mn_interest),'filled')
-hold on
-stem3(m,n,imag(W1_mn_interest),'--*r')
-title('Absolute values of harmonics for a given frequency')
 
 figure
-max_W1_mn=max(W1_mn_interest);
-stem3(m,n,real(W1_mn_interest./max_W1_mn),'filled')
-hold on
-stem3(m,n,imag(W1_mn_interest./max_W1_mn),'--*r')
+W1_mn_interest = W1_mn_store(:,:,57);
+max_W1_mn = max(max(W1_mn_interest));
+heatmap(m,n,log10(abs(real(W1_mn_interest./max_W1_mn))))
 title('Normalized values of harmonics for a given frequency')
 
 
@@ -460,59 +464,59 @@ figure
 %     end
 % end
 
-plot(f,abs(real(kzmn_p(:,5,1))),'LineWidth',2)
-hold on
-plot(f,-abs(imag(kzmn_p(:,5,1))),'LineWidth',2)
-hold on
-plot(f,abs(real(kzmn_p(:,6,1))),'LineWidth',2)
-hold on
-plot(f,-abs(imag(kzmn_p(:,6,1))),'LineWidth',2)
-hold on
-plot(f,abs(real(kzmn_p(:,7,1))),'LineWidth',2)
-hold on
-plot(f,-abs(imag(kzmn_p(:,7,1))),'LineWidth',2)
-hold on
-plot(f,abs(real(kzmn_p(:,8,1))),'LineWidth',2)
-hold on
-plot(f,-abs(imag(kzmn_p(:,8,1))),'LineWidth',2)
-hold on
-plot(f,abs(real(kzmn_p(:,9,1))),'LineWidth',2)
-hold on
-plot(f,-abs(imag(kzmn_p(:,9,1))),'LineWidth',2)
-
-legend('Real m=0,n=0','Imag m=0,n=0','Real m=1,n=0','Imag m=1,n=0',...
-    'Real m=2,n=0','Imag m=2,n=0','Real m=3,n=0','Imag m=3,n=0', 'Real m=4,n=0','Imag m=4,n=0')
-
-title('Postive Harmonics of kzmn at the fluid')
-xlabel('Frequency [Hz]')
-ylabel('kz_mn [2\pi/m]')  
-
-figure
-
-plot(f,abs(real(kzmn_p(:,1,1))),'LineWidth',2)
-hold on
-plot(f,-abs(imag(kzmn_p(:,1,1))),'LineWidth',2)
-hold on
-plot(f,abs(real(kzmn_p(:,2,1))),'LineWidth',2)
-hold on
-plot(f,-abs(imag(kzmn_p(:,2,1))),'LineWidth',2)
-hold on
-plot(f,abs(real(kzmn_p(:,3,1))),'LineWidth',2)
-hold on
-plot(f,-abs(imag(kzmn_p(:,3,1))),'LineWidth',2)
-hold on
-plot(f,abs(real(kzmn_p(:,4,1))),'LineWidth',2)
-hold on
-plot(f,-abs(imag(kzmn_p(:,4,1))),'LineWidth',2)
-
-
-
-legend('Real m=-4,n=0','Imag m=-4,n=0','Real m=-3,n=0','Imag m=-3,n=0',...
-    'Real m=-2,n=0','Imag m=-2,n=0','Real m=-1,n=0','Imag m=-1,n=0')
-
-title('Negative Harmonics of kzmn at the fluid')
-xlabel('Frequency [Hz]')
-ylabel('kz_mn [2\pi/m]')  
+% plot(f,abs(real(kzmn_p(:,5,1))),'LineWidth',2)
+% hold on
+% plot(f,-abs(imag(kzmn_p(:,5,1))),'LineWidth',2)
+% hold on
+% plot(f,abs(real(kzmn_p(:,6,1))),'LineWidth',2)
+% hold on
+% plot(f,-abs(imag(kzmn_p(:,6,1))),'LineWidth',2)
+% hold on
+% plot(f,abs(real(kzmn_p(:,7,1))),'LineWidth',2)
+% hold on
+% plot(f,-abs(imag(kzmn_p(:,7,1))),'LineWidth',2)
+% hold on
+% plot(f,abs(real(kzmn_p(:,8,1))),'LineWidth',2)
+% hold on
+% plot(f,-abs(imag(kzmn_p(:,8,1))),'LineWidth',2)
+% hold on
+% plot(f,abs(real(kzmn_p(:,9,1))),'LineWidth',2)
+% hold on
+% plot(f,-abs(imag(kzmn_p(:,9,1))),'LineWidth',2)
+% 
+% legend('Real m=0,n=0','Imag m=0,n=0','Real m=1,n=0','Imag m=1,n=0',...
+%     'Real m=2,n=0','Imag m=2,n=0','Real m=3,n=0','Imag m=3,n=0', 'Real m=4,n=0','Imag m=4,n=0')
+% 
+% title('Postive Harmonics of kzmn at the fluid')
+% xlabel('Frequency [Hz]')
+% ylabel('kz_mn [2\pi/m]')  
+% 
+% figure
+% 
+% plot(f,abs(real(kzmn_p(:,1,1))),'LineWidth',2)
+% hold on
+% plot(f,-abs(imag(kzmn_p(:,1,1))),'LineWidth',2)
+% hold on
+% plot(f,abs(real(kzmn_p(:,2,1))),'LineWidth',2)
+% hold on
+% plot(f,-abs(imag(kzmn_p(:,2,1))),'LineWidth',2)
+% hold on
+% plot(f,abs(real(kzmn_p(:,3,1))),'LineWidth',2)
+% hold on
+% plot(f,-abs(imag(kzmn_p(:,3,1))),'LineWidth',2)
+% hold on
+% plot(f,abs(real(kzmn_p(:,4,1))),'LineWidth',2)
+% hold on
+% plot(f,-abs(imag(kzmn_p(:,4,1))),'LineWidth',2)
+% 
+% 
+% 
+% legend('Real m=-4,n=0','Imag m=-4,n=0','Real m=-3,n=0','Imag m=-3,n=0',...
+%     'Real m=-2,n=0','Imag m=-2,n=0','Real m=-1,n=0','Imag m=-1,n=0')
+% 
+% title('Negative Harmonics of kzmn at the fluid')
+% xlabel('Frequency [Hz]')
+% ylabel('kz_mn [2\pi/m]')  
 
 
 

@@ -48,8 +48,8 @@ el_side_y = Ly/nel_y;
 % SPACE HARMONICS
 
 %index of harmonics
- m= -4:1:4;
- n=-4:1:4;
+ m= -5:1:5;
+ n=-5:1:5;
 
 [MM,NN]=meshgrid(m,n);
 
