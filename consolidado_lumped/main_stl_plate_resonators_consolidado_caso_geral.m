@@ -230,7 +230,7 @@ Fext2(1:3:GDof)= Fext;
 
 %Based on equations 25,26 and 28 using shape functions
 [Df,V_store_H] = force_fluid_lumped(GDof, numberRes,m_index,n_index,nnode,nelem,elem,nodes,...
-     dof, Df1mn,kx_aux,ky_aux,kz2mn,h,A_element);
+     dof, Df1mn,Df2mn,kx_aux,ky_aux,A_element);
 
 % Adding fluid effects to dynamic stiffness matrix
 

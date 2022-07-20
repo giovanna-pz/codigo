@@ -1,5 +1,5 @@
 function [Df,V_store_H] = force_fluid_lumped(GDof, numberRes,m_index,n_index,nnode,nelem,elem,nodes,...
-     dof, Df1mn,kx_aux,ky_aux,kz2mn,h,A_element)
+     dof, Df1mn,Df2mn,kx_aux,ky_aux,A_element)
 
 %V_store_H: 3D Matrix: lines: nodes
 %columns: harmonics in x (m_index)
@@ -56,8 +56,8 @@ Df=zeros(GDof+numberRes,GDof+numberRes); %start summation
           
           %Equation 33
           %(v1_mn_H.')- transpose without the complex conjugate
-          Df = Df + 2*Df1mn(kk,ll)*(v1_mn*v1_mn_H.'); %Equation 33
-          %Df = Df + Df1mn(kk,ll)*(v1_mn*v1_mn_H.')+Df1mn(kk,ll)*exp(1i*kz2mn(kk,ll)*h)*(v1_mn*v1_mn_H.') ; %Equation 33%Df = Df + 2*Df1mn(kk,ll)*(v1_mn*v1_mn_H.'); %Equation 33
+          %Equation 42 deduction Giovanna
+          Df = Df + Df1mn(kk,ll)*(v1_mn*v1_mn_H.')+Df2mn(kk,ll)*(v1_mn*v1_mn_H.') ; %Equation 33%Df = Df + 2*Df1mn(kk,ll)*(v1_mn*v1_mn_H.'); %Equation 33
   end
  end
  
