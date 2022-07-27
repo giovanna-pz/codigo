@@ -1,0 +1,5 @@
+6 harmonicas
+vetor de frequencia f = logspace(log10(50),log10(5e3),1e4);
+
+uz_damp - curva de deslocamento com amortecimento
+STL_damp - curva de STL com amortecimento 
